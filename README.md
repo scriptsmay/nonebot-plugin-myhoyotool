@@ -1,11 +1,8 @@
 # nonebot-plugin-hoyotool
 
+_✨ 米哈游任务小助手 - NoneBot 插件  ✨_
 
-## nonebot-plugin-hoyotool
-
-_✨ NoneBot 插件简单描述 ✨_
-
-一个基于nonebot2的签到登录账号管理等工具。
+一个基于nonebot2的米哈游工具，支持米哈游游戏签到、账号管理等工具。
 
 > [!NOTE]
 > 模板库中自带了一个发布工作流, 你可以使用此工作流自动发布你的插件到 pypi
@@ -105,3 +102,7 @@ _✨ NoneBot 插件简单描述 ✨_
 ### 效果图
 
 TODO
+
+
+插件商店： https://nonebot.dev/store/plugins
+
