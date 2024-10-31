@@ -51,11 +51,11 @@ class Preference(BaseModel):
     """是否保存日志"""
     log_head: str = ""
     '''日志开头字符串(只有把插件放进plugins目录手动加载时才需要设置)'''
-    log_path: Optional[Path] = data_path / "mystool.log"
+    log_path: Optional[Path] = data_path / "myhoyotool.log"
     """日志保存路径"""
     log_rotation: Union[str, int, time, timedelta] = "1 week"
     '''日志保留时长(需要按照格式设置)'''
-    plugin_name: str = "nonebot_plugin_mystool"
+    plugin_name: str = "nonebot_plugin_myhoyotool"
     '''插件名(为模块名字，或于plugins目录手动加载时的目录名)'''
     encoding: str = "utf-8"
     '''文件读写编码'''
@@ -246,7 +246,7 @@ class PluginEnv(BaseSettings):
     device_config = DeviceConfig()
 
     class Config(BaseSettings.Config):
-        env_prefix = "mystool_"
+        env_prefix = "myhoyotool_"
         env_file = '.env'
 
 
@@ -255,7 +255,7 @@ if plugin_config_path.exists() and plugin_config_path.is_file():
 else:
     plugin_config = PluginConfig()
     try:
-        str_data = plugin_config.json(indent=4)
+        str_data = plugin_config.model_dump_json(indent=4)
         plugin_config_path.parent.mkdir(parents=True, exist_ok=True)
         with open(plugin_config_path, "w", encoding="utf-8") as f:
             f.write(str_data)
@@ -264,13 +264,6 @@ else:
         raise
     else:
         logger.info(f"插件配置文件 {plugin_config_path} 不存在，已创建默认插件配置文件。")
-
-# TODO: 可能产生 #271 的问题 https://github.com/Ljzd-PRO/nonebot-plugin-mystool/issues/271
-# @_driver.on_startup
-# def _():
-#     """将 ``PluginMetadata.config`` 设为定义的插件配置对象 ``plugin_config``"""
-#     plugin = nonebot.plugin.get_plugin(plugin_config.preference.plugin_name)
-#     plugin.metadata.config = plugin_config
 
 
 plugin_env = PluginEnv()

@@ -18,16 +18,13 @@ __all__ = ["root_path", "data_path", "BaseModelWithSetter", "BaseModelWithUpdate
 root_path = Path(__name__).parent.absolute()
 '''NoneBot2 机器人根目录'''
 
-data_path = root_path / "data" / "nonebot-plugin-mystool"
+data_path = root_path / "data" / "nonebot-plugin-myhoyotool"
 '''插件数据保存目录'''
 
 
 class BaseModelWithSetter(BaseModel):
     """
     可以使用@property.setter的BaseModel
-
-    目前pydantic 1.10.7 无法使用@property.setter
-    issue: https://github.com/pydantic/pydantic/issues/1577#issuecomment-790506164
     """
 
     @no_type_check
@@ -510,7 +507,7 @@ class BaseApiStatus(BaseModel):
         """
         返回错误类型
         """
-        for key, field in self.__fields__.items():
+        for key, field in self.model_fields.items():
             if field and key != "success":
                 return key
         return None

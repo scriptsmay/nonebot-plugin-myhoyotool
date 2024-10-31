@@ -6,9 +6,9 @@ from uuid import UUID, uuid4
 
 from httpx import Cookies
 from nonebot.log import logger
-from pydantic import BaseModel, ValidationError, validator, Field
+from pydantic import BaseModel, ValidationError, field_validator, Field
 
-from .._version import __version__
+from .. import __version__
 from ..model.common import data_path, BaseModelWithSetter, Address, BaseModelWithUpdate, Good, GameRecord
 
 if TYPE_CHECKING:
@@ -395,7 +395,7 @@ class UserData(BaseModelWithSetter):
     accounts: Dict[str, UserAccount] = {}
     """储存一些已绑定的账号数据"""
 
-    @validator("uuid")
+    @field_validator("uuid")
     def uuid_validator(cls, v):
         """
         验证UUID是否为合法的UUIDv4
@@ -412,7 +412,7 @@ class UserData(BaseModelWithSetter):
         exchange_plans = self.exchange_plans
         self.exchange_plans = set()
         for plan in exchange_plans:
-            plan = ExchangePlan.parse_obj(plan)
+            plan = ExchangePlan.model_validate(plan)
             self.exchange_plans.add(plan)
 
         if self.uuid is None:
@@ -485,7 +485,7 @@ class PluginDataManager:
                 with open(plugin_data_path, "r") as f:
                     plugin_data_dict = json.load(f)
                 # 读取完整的插件数据
-                cls.plugin_data = PluginData.parse_obj(plugin_data_dict)
+                cls.plugin_data = PluginData.model_validate(plugin_data_dict)
             except (ValidationError, JSONDecodeError):
                 logger.exception(f"读取插件数据文件失败，请检查插件数据文件 {plugin_data_path} 格式是否正确")
                 raise
@@ -496,7 +496,7 @@ class PluginDataManager:
         else:
             cls.plugin_data = PluginData()
             try:
-                str_data = cls.plugin_data.json(indent=4)
+                str_data = cls.plugin_data.model_dump_json(indent=4)
                 plugin_data_path.parent.mkdir(parents=True, exist_ok=True)
                 with open(plugin_data_path, "w", encoding="utf-8") as f:
                     f.write(str_data)

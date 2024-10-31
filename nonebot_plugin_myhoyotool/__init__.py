@@ -4,14 +4,17 @@ from nonebot import require
 
 from . import handler as handler
 
-# 定义版本号
 __version__ = "v0.1.0"
+"""
+定义插件版本号
+"""
 
+require("nonebot_plugin_saa")
 """
 加载saa插件 提供多适配器支持
 :::notice 请勿重复加载saa
 """
-require("nonebot_plugin_saa")
+
 require("nonebot_plugin_apscheduler")
 
 _driver = nonebot.get_driver()
@@ -65,11 +68,9 @@ from .utils import CommandBegin
 _driver.on_startup(CommandBegin.set_command_begin)
 
 # 加载命令
-
 from .command import *
 
 # 加载其他代码
-
 from .api import *
 from .model import *
 from .utils import *
