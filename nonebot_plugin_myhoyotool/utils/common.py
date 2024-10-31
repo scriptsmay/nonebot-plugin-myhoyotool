@@ -79,7 +79,7 @@ COMMAND_BEGIN = CommandBegin()
 '''命令开头字段（包括例如'/'和插件命令起始字段例如'mystool'）'''
 
 
-def set_logger(logger: None):
+def set_logger():
     """
     给日志记录器对象增加输出到文件的Handler
     """
@@ -98,7 +98,7 @@ def set_logger(logger: None):
     return logger
 
 
-logger = set_logger(logger)
+logger = set_logger()
 """本插件所用日志记录器对象（包含输出到文件）"""
 
 PLUGIN = nonebot.plugin.get_plugin(plugin_config.preference.plugin_name)
