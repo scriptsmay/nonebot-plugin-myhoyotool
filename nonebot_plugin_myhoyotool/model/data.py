@@ -386,10 +386,6 @@ class UserData(BaseModelWithSetter):
     '''极验Geetest人机验证打码API发送的参数（除gt，challenge外）'''
     uuid: Optional[str] = None
     """用户UUID密钥，用于不同NoneBot适配器平台之间的数据同步，因此不可泄露"""
-    qq_guild: Optional[Dict[str, int]] = {}
-    """储存用户所在的QQ频道ID {用户ID : 频道ID}"""
-    qq_guilds: Optional[Dict[str, List[int]]] = Field(default={}, exclude=True)
-    """旧版（v2.1.0 之前）储存用户所在的QQ频道ID {用户ID : [频道ID]}"""
     exchange_plans: Union[Set[ExchangePlan], List[ExchangePlan]] = set()
     """兑换计划列表"""
     accounts: Dict[str, UserAccount] = {}
@@ -423,10 +419,6 @@ class UserData(BaseModelWithSetter):
             _new_uuid_in_init = True
         _uuid_set.add(self.uuid)
 
-        # 读取旧版配置中的 qq_guilds 信息，对每个账号取第一个 GuildID 值以生成新的 qq_guild Dict
-        if not self.qq_guild:
-            self.qq_guild = {k: v[0] for k, v in filter(lambda x: x[1], self.qq_guilds.items())}
-
     def __hash__(self):
         return hash(self.uuid)
 
@@ -435,7 +427,7 @@ class PluginData(BaseModel):
     version: str = __version__
     """创建插件数据文件时的版本号"""
     user_bind: Optional[Dict[str, str]] = {}
-    '''不同NoneBot适配器平台的用户数据绑定关系（如QQ聊天和QQ频道）(空用户数据:被绑定用户数据)'''
+    '''不同NoneBot适配器平台的用户数据绑定关系（如QQ聊天和tg）(空用户数据:被绑定用户数据)'''
     users: Dict[str, UserData] = {}
     '''所有用户数据'''
 
